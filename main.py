@@ -31,11 +31,11 @@ class VkMainer():
         return response['first_name'] + "\n" + response['last_name']
 
     def friends_matrix(self, basic_user_id: int) -> List[List[int]]:
-        close_friends = self.get_friends(basic_user_id)
+        close_friends = self.get_friends(basic_user_id)[:100]
         friends_lists = {basic_user_id: close_friends}
         nodes = set([basic_user_id] + close_friends)
         for friend in close_friends:
-            friend_friends = self.get_friends(friend, counter=15)
+            friend_friends = self.get_friends(friend, counter=10)
             friends_lists[friend] = friend_friends
             nodes |= set(friend_friends)
         print('finished collecting')
@@ -58,6 +58,6 @@ class VkMainer():
 data_mainer = VkMainer()
 data_matrix = data_mainer.friends_matrix(my_id)
 
-with open('friendsgraph.csv', "w", newline="") as file:
+with open('friendsgraph_small.csv', "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerows(data_matrix)
